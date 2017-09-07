@@ -15,20 +15,15 @@ Attack implementations are not provided in this repository.
 4. Test the defense with `python3 test_defense.py .`(See following for possible errors)
 5. Defense performance is plotted in `graph/defense_performance.pdf`.
 
-## Fix `ValueError: ('Unknown loss function', ':categorical_crossentropy_logit')`:
+### Fix `ValueError: ('Unknown loss function', ':categorical_crossentropy_logit')`:
 
-The trained classifier provided uses `categorical_crossentropy_logit`, which is not in the standard Keras distributions. There are two ways to get rid of this error:
+The trained classifier provided uses `categorical_crossentropy_logit`, which is a hack that is not included the standard Keras distributions. Add `categorical_crossentropy_logit` to your keras source to get rid of this error:
 
-### 1. Add `categorical_crossentropy_logit` to your keras source.
-
-Add the following function to `losses.py`.
+Add the following function to `losses.py`:
 
 ```Python
 def categorical_crossentropy_logit(y_true, y_pred):
     return K.categorical_crossentropy(y_pred, y_true, from_logits=True)
 ```
+
 The location of my `losses.py` is `/home/mengdy/.local/lib/python3.6/site-packages/keras/losses.py`
-
-### 2. Use a different classifier.
-
-This can be done by running `train_models.py`.
