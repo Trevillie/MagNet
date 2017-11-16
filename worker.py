@@ -5,6 +5,8 @@
 ## This program is licenced under the BSD 2-Clause licence,
 ## contained in the LICENCE file in this directory.
 
+from __future__ import print_function
+
 import matplotlib
 matplotlib.use('Agg')
 from scipy.stats import entropy
@@ -19,6 +21,7 @@ import os
 from utils import prepare_data
 import utils
 import matplotlib.pyplot as plt
+import six
 
 
 class AEDetector:
@@ -218,7 +221,8 @@ class AttackData:
         examples: Path or object of input examples.
         labels: Ground truth labels.
         """
-        if isinstance(examples, str): self.data = utils.load_obj(examples)
+
+        if isinstance(examples, six.string_types): self.data = utils.load_obj(examples)
         else: self.data = examples
         self.labels = labels
         self.name = name
@@ -332,7 +336,7 @@ class Evaluator:
             none.append(none_acc)
 
         size = 2.5
-        plt.plot(confs, none, c="green", label="No fefense", marker="x", markersize=size)
+        plt.plot(confs, none, c="green", label="No defense", marker="x", markersize=size)
         plt.plot(confs, det_only, c="orange", label="With detector", marker="o", markersize=size)
         plt.plot(confs, ref_only, c="blue", label="With reformer", marker="^", markersize=size)
         plt.plot(confs, both, c="red", label="With detector & reformer", marker="s", markersize=size)
