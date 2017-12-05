@@ -37,7 +37,6 @@ def load_batch(fpath, label_key='labels'):
     final[:,:,:,2] = data[:,2,:,:]
 
     final /= 255
-    final -= .5
     labels2 = np.zeros((len(labels), 10))
     labels2[np.arange(len(labels2)), labels] = 1
 
@@ -54,7 +53,7 @@ def load_batch(fpath):
         img = arr[1:].reshape((3,32,32)).transpose((1,2,0))
 
         labels.append(lab)
-        images.append((img/255)-.5)
+        images.append(img/255)
     return np.array(images),np.array(labels)
     
 
