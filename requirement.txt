@@ -1,0 +1,7 @@
+keras
+tensorflow
+numpy
+scipy
+matplotlib
+future
+h5py
