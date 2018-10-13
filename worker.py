@@ -20,6 +20,7 @@ from utils import prepare_data
 import utils
 import matplotlib.pyplot as plt
 
+from train_models import custom_loss
 
 class AEDetector:
     def __init__(self, path, p=1):
@@ -124,7 +125,8 @@ class Classifier:
         classifier_path: Path to Keras classifier file.
         """
         self.path = classifier_path
-        self.model = load_model(classifier_path)
+        # Work-around for custom loss function
+        self.model = load_model(classifier_path, custom_objects={'custom_loss': custom_loss})
         self.softmax = Sequential()
         self.softmax.add(Lambda(lambda X: softmax(X, axis=1), input_shape=(10,)))
 
@@ -332,7 +334,7 @@ class Evaluator:
             none.append(none_acc)
 
         size = 2.5
-        plt.plot(confs, none, c="green", label="No fefense", marker="x", markersize=size)
+        plt.plot(confs, none, c="green", label="No defense", marker="x", markersize=size)
         plt.plot(confs, det_only, c="orange", label="With detector", marker="o", markersize=size)
         plt.plot(confs, ref_only, c="blue", label="With reformer", marker="^", markersize=size)
         plt.plot(confs, both, c="red", label="With detector & reformer", marker="s", markersize=size)
