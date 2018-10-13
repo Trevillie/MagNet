@@ -16,6 +16,10 @@ import tensorflow as tf
 from setup_mnist import MNIST
 import os
 
+# Loss function callable outside script, and updated for load_model keras call
+def custom_loss(correct, predicted):
+    return tf.nn.softmax_cross_entropy_with_logits_v2(labels=correct,
+                                                   logits=predicted)
 
 def train(data, file_name, params, num_epochs=50, batch_size=128):
     """
@@ -43,13 +47,9 @@ def train(data, file_name, params, num_epochs=50, batch_size=128):
     model.add(Activation('relu'))
     model.add(Dense(10))
 
-    def fn(correct, predicted):
-        return tf.nn.softmax_cross_entropy_with_logits(labels=correct,
-                                                       logits=predicted)
-
     sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 
-    model.compile(loss=fn,
+    model.compile(loss=custom_loss,
                   optimizer=sgd,
                   metrics=['accuracy'])
 
